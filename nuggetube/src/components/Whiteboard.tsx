@@ -26,7 +26,27 @@ export default function Whiteboard({ onAnalyze, onOpenChange }: WhiteboardProps)
     }
   }, [isOpen]);
 
-  const startDrawing = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  const getCoordinates = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return { x: 0, y: 0 };
+    const rect = canvas.getBoundingClientRect();
+    
+    let clientX, clientY;
+    if ('touches' in e) {
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
+    } else {
+      clientX = (e as React.MouseEvent).clientX;
+      clientY = (e as React.MouseEvent).clientY;
+    }
+    
+    return {
+      x: clientX - rect.left,
+      y: clientY - rect.top
+    };
+  };
+
+  const startDrawing = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
     setIsDrawing(true);
     draw(e);
   };
@@ -35,8 +55,8 @@ export default function Whiteboard({ onAnalyze, onOpenChange }: WhiteboardProps)
     setIsDrawing(false);
   };
 
-  const draw = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    if (!isDrawing && e.type !== 'mousedown') return;
+  const draw = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+    if (!isDrawing && e.type !== 'mousedown' && e.type !== 'touchstart') return;
     
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -44,16 +64,14 @@ export default function Whiteboard({ onAnalyze, onOpenChange }: WhiteboardProps)
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const { x, y } = getCoordinates(e);
 
     ctx.strokeStyle = color;
     ctx.lineWidth = brushSize;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 
-    if (e.type === 'mousedown') {
+    if (e.type === 'mousedown' || e.type === 'touchstart') {
       ctx.beginPath();
       ctx.moveTo(x, y);
     } else {
@@ -209,6 +227,9 @@ export default function Whiteboard({ onAnalyze, onOpenChange }: WhiteboardProps)
               onMouseUp={stopDrawing}
               onMouseMove={draw}
               onMouseLeave={stopDrawing}
+              onTouchStart={startDrawing}
+              onTouchEnd={stopDrawing}
+              onTouchMove={draw}
               className="border-2 border-gray-300 rounded cursor-crosshair mb-4 w-full"
               style={{ touchAction: 'none' }}
             />
