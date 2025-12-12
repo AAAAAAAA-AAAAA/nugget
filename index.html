@@ -18,6 +18,10 @@
         aside ul { list-style: none; padding: 0; }
         aside li { margin: 10px 0; }
         main { flex: 1; padding: 20px; }
+        .chicken-generator { margin-bottom: 20px; }
+        .red-button { background: #ff0000; color: white; border: none; padding: 10px 20px; font-size: 16px; cursor: pointer; border-radius: 5px; }
+        .chicken-container { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+        .chicken { font-size: 50px; }
         .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
         .video { background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
         .video img { width: 100%; height: 180px; object-fit: cover; }
@@ -51,6 +55,10 @@
         </aside>
         <main>
             <h2>Recommended Videos</h2>
+            <div class="chicken-generator">
+                <button id="generateChicken" class="red-button">Generate Chicken 🐔</button>
+            </div>
+            <div id="chickenContainer" class="chicken-container"></div>
             <div class="video-grid">
                 <div class="video">
                     <img src="https://via.placeholder.com/300x180?text=Video+1" alt="Video 1">
@@ -75,5 +83,14 @@
             </div>
         </main>
     </div>
+    <script>
+        document.getElementById('generateChicken').addEventListener('click', function() {
+            const chickenContainer = document.getElementById('chickenContainer');
+            const chicken = document.createElement('div');
+            chicken.className = 'chicken';
+            chicken.textContent = '🐔';
+            chickenContainer.appendChild(chicken);
+        });
+    </script>
 </body>
 </html>
