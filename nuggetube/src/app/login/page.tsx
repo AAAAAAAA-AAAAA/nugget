@@ -1,12 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { signInWithPopup } from 'firebase/auth';
+import { signInWithPopup, User } from 'firebase/auth';
 import { auth, googleProvider } from '../lib/filebase';
 import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
 
   useEffect(() => {
