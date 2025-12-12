@@ -4,12 +4,14 @@ import { useState, useEffect, useRef } from "react";
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from './lib/filebase';
-import Map from "../components/Map";
+import dynamic from 'next/dynamic';
 import Leaderboard from "../components/Leaderboard";
 import Chatbot from "../components/Chatbot";
 import Whiteboard from "../components/Whiteboard";
 import AdoptionCenter from "../components/AdoptionCenter";
 import ChickenCare from "../components/ChickenCare";
+
+const Map = dynamic(() => import("../components/Map"), { ssr: false });
 
 interface Bird {
   id: number;
