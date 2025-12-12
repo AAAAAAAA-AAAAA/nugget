@@ -39,7 +39,7 @@ export default function LoginPage() {
         <div>
           <p>Welcome, {user.displayName}!</p>
           <p>Redirecting...</p>
-          <img src={user.photoURL} alt="Profile" style={{ borderRadius: '50%', width: '100px' }} />
+          <img src={user.photoURL || '/default-profile.png'} alt="Profile" style={{ borderRadius: '50%', width: '100px' }} />
         </div>
       )}
     </div>
